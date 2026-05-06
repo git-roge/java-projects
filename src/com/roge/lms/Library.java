@@ -28,4 +28,8 @@ public class Library {
     public Map<Integer, Book> getBookList() {
         return bookList;
     }
+
+    public void removeBook(int bookId){
+        bookList.remove(bookId);
+    }
 }

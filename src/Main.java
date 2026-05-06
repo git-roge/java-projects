@@ -11,9 +11,15 @@ public class Main {
         library.addBook("One Piece", "Kirishima", 1997);
 
         for(Book book : library.getBookList().values()){
-            if(book.getBookId() == 2){
-                System.out.println(book.getTitle() + " - " + book.getAuthor());
-            }
+            System.out.println(book.getAuthor());
         }
+
+        library.removeBook(1);
+
+        for(Book book : library.getBookList().values()){
+            System.out.println(book.toString());
+        }
+
+
     }
 }
