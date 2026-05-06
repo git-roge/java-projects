@@ -10,8 +10,10 @@ public class Main {
         library.addBook("Naruto", "Yukihiro", 1997);
         library.addBook("One Piece", "Kirishima", 1997);
 
-        for(Map.Entry<Integer, Book> entry : library.getBookList().entrySet()) {
-            System.out.println("ID: " + entry.getKey() + ", " + entry.getValue());
+        for(Book book : library.getBookList().values()){
+            if(book.getBookId() == 2){
+                System.out.println(book.getTitle() + " - " + book.getAuthor());
+            }
         }
     }
 }
