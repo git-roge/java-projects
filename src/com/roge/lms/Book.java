@@ -5,13 +5,14 @@ public class Book {
     private String title;
     private String author;
     private int year;
-
+    private Status status;
 
     public Book(int bookId, String title, String author, int year){
         this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.year = year;
+        this.status = Status.AVAILABLE;
     }
 
     public int getBookId(){
@@ -45,8 +46,8 @@ public class Book {
     @Override
     public String toString() {
         return String.format(
-          "Book{id=%d, title='%s', author='%s', year=%d}",
-          this.bookId, this.title, this.author, this.year
+          "Book{id=%d, title='%s', author='%s', year=%d, status='%s'}",
+          this.bookId, this.title, this.author, this.year, this.status
         );
     }
 }
