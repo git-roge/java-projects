@@ -15,10 +15,6 @@ public class Book {
         this.status = Status.AVAILABLE;
     }
 
-    public int getBookId(){
-        return bookId;
-    }
-
     public void setTitle(String title){
         this.title = title;
     }
@@ -43,10 +39,18 @@ public class Book {
         return year;
     }
 
+    public void setStatus(Status status){
+        this.status = status;
+    }
+
+    public Status getStatus(){
+        return this.status;
+    }
+
     @Override
     public String toString() {
         return String.format(
-          "Book{id=%d, title='%s', author='%s', year=%d, status='%s'}",
+          "Book{bookId=%d, title='%s', author='%s', year=%d, status='%s'}",
           this.bookId, this.title, this.author, this.year, this.status
         );
     }
