@@ -15,6 +15,8 @@ public class Book {
         this.status = Status.AVAILABLE;
     }
 
+    public int getBookId(){ return this.bookId;}
+
     public void setTitle(String title){
         this.title = title;
     }

@@ -12,6 +12,8 @@ public class Transaction {
 
     }
 
+    public int getTransactionId(){return this.transactionId;}
+
     public int getUserId(){ return this.userId;}
 
     public int getBookId() { return this.bookId;}

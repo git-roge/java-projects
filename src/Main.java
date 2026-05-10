@@ -1,7 +1,4 @@
-import com.roge.lms.Book;
-import com.roge.lms.Library;
-import com.roge.lms.Transaction;
-import com.roge.lms.User;
+import com.roge.lms.*;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -22,9 +19,9 @@ public class Main {
 
         int choice = 0;
 
-        while (choice != 7){
+        while (choice != 8){
             System.out.println("Actions: \n" +
-                    "1. Add Book\n2. Add User\n3. Show book list\n4. Show Users\n5. Borrow book\n6. Select User\n7. Exit"
+                    "1. Add Book\n2. Add User\n3. Show book list\n4. Show Users\n5. Borrow book\n6. Select User\n7. Return book\n8. Exit"
             );
             choice = scanner.nextInt();
             scanner.nextLine();
@@ -63,27 +60,97 @@ public class Main {
                 }
             }
 
+            //borrow book
             if(choice == 5){
-                System.out.print("Book Id: ");
-                int bookId = scanner.nextInt();
-                scanner.nextLine();
+                int borrowBookId, borrowUserId;
 
-                System.out.print("User Id: ");
-                int userId = scanner.nextInt();
-                scanner.nextLine();
+                while (true){
+                    System.out.print("Enter userId: ");
+                    borrowUserId = scanner.nextInt();
+                    scanner.nextLine();
 
-                library.borrowBook(bookId, userId);
+                    if(!library.validateUser(borrowUserId)){
+                        System.out.println("User doesn't exist");
+                    }else {
+                        break;
+                    }
+                }
+
+                while (true){
+                    System.out.print("Enter bookId: ");
+                    borrowBookId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if(!library.validateBook(borrowBookId)){
+                        System.out.println("Book doesn't exist.");
+                    }else {
+                        break;
+                    }
+                }
+
+                library.borrowBook(borrowBookId, borrowUserId);
             }
 
             if(choice == 6){
-                System.out.print("Enter User id: ");
-                int userId = scanner.nextInt();
-                scanner.nextLine();
+                int userId;
 
-                for(Transaction transaction : library.getTransactionList()){
-                    if(transaction.getUserId() == 1){
-                        System.out.println(library.getBookList().get(transaction.getBookId()).getTitle());
+                while(true){
+                    System.out.print("Enter user Id: ");
+                    userId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if(!library.validateUser(userId)){
+                        System.out.println("User doesn't exist");
+                    }else{
+                        break;
                     }
+                }
+
+                User user = library.getUserList().get(userId);
+
+                if(user == null){
+                    System.out.println("User doesn't exist.");
+                    continue;
+                }
+
+                System.out.println(user.toString());
+                for(Book book :user.getBorrowedBooks()){
+                    System.out.println(book.getBookId() +". " + book.getTitle());
+                }
+            }
+            if (choice == 7){
+                int returnBookId;
+                int returnUserId;
+
+                while (true){
+                    System.out.print("Enter userId: ");
+                    returnUserId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if(!library.validateUser(returnUserId)){
+                        System.out.println("User doesn't exist");
+                    }else {
+                        break;
+                    }
+                }
+
+                while (true){
+                    System.out.print("Enter bookId: ");
+                    returnBookId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    if(!library.validateBook(returnBookId)){
+                        System.out.println("Book doesn't exist.");
+                    }else {
+                        break;
+                    }
+                }
+
+                library.returnBook(returnBookId, returnUserId);
+            }
+            if (choice == 9){
+                for(Transaction transaction : library.getTransactionList()){
+                    System.out.println(transaction.toString());
                 }
             }
         }

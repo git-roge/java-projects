@@ -50,24 +50,51 @@ public class Library {
     }
 
     public void borrowBook(int bookId, int userId){
-        if(!bookList.containsKey(bookId)){
-            System.out.println("The selected book doesn't exist.");
-            return;
-        }
+        Book book = bookList.get(bookId);
+        User user = userList.get(userId);
 
-        if(!userList.containsKey(userId)){
-            System.out.println("The selected user doesn't exist.");
+        if(user.getBorrowedBooks().contains(book)){
+            System.out.printf("\n%s already borrowed this book.\n", user.getUserName());
             return;
         }
+        if(book.getStatus() == Status.BORROWED){
+            System.out.println("Book is borrowed.");
+            return;
+        }
+        book.setStatus(Status.BORROWED);
+
+        user.addBorrowedBooks(book);
 
         Transaction transaction = new Transaction(++this.transactionId, bookId, userId);
-        transactionList.add(transaction);
 
-        for(Map.Entry<Integer, Book> entry : getBookList().entrySet()){
-            if(entry.getKey() == bookId && entry.getValue().getStatus() == Status.AVAILABLE){
-                entry.getValue().setStatus(Status.BORROWED);
-            }
+        transactionList.add(transaction);
+        System.out.println("Book has borrowed successfully.");
+    }
+
+    public void returnBook(int returnBookId, int returnUserId){
+        Book book = bookList.get(returnBookId);
+        User user = userList.get(returnUserId);
+
+        if(!user.getBorrowedBooks().contains(book)){
+            System.out.printf("\n%s didn't borrow this book. Please check the book Id.\n", user.getUserName());
+            return;
         }
+
+        book.setStatus(Status.AVAILABLE);
+        user.removeBorrowedBooks(book);
+        System.out.println("Book has returned.");
+    }
+
+    public boolean validateUser(int userId){
+        User user = userList.get(userId);
+
+        return user != null;
+    }
+
+    public boolean validateBook(int bookId){
+        Book book = bookList.get(bookId);
+
+        return book != null;
     }
 
     public List<Transaction> getTransactionList(){
