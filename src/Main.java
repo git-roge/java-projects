@@ -1,5 +1,6 @@
 import com.roge.lms.*;
 
+import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -18,15 +19,20 @@ public class Main {
         library.addUser("Ivy");
 
         int choice = 0;
-
-        while (choice != 8){
-            System.out.println("Actions: \n" +
-                    "1. Add Book\n2. Add User\n3. Show book list\n4. Show Users\n5. Borrow book\n6. Select User\n7. Return book\n8. Exit"
-            );
-            choice = scanner.nextInt();
-            scanner.nextLine();
-
-            if (choice == 1){
+        while (choice != 9) {
+            try {
+                System.out.println("Actions: \n" +
+                        "1. Add Book\n2. Add User\n3. Show book list\n4. Show Users\n5. Borrow book\n6. Select User\n7. Return book\n8. Show transactions\n9. Exit"
+                );
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            }catch (InputMismatchException e) {
+                System.out.println("Invalid action");
+                scanner.nextLine();
+                continue;
+            }
+            //Add book
+            if (choice == 1) {
                 System.out.print("Book name: ");
                 String newBookName = scanner.nextLine();
                 System.out.print("Book author: ");
@@ -37,53 +43,56 @@ public class Main {
 
                 library.addBook(newBookName, newBookAuthor, newBookYear);
             }
-
-            if(choice == 2){
+            //Add user
+            if (choice == 2) {
                 System.out.print("User name: ");
                 String newUserName = scanner.nextLine();
 
                 library.addUser(newUserName);
             }
-
-            if(choice == 3){
-                for (Map.Entry<Integer, Book> entry : library.getBookList().entrySet()){
+            //Show book list
+            if (choice == 3) {
+                for (Map.Entry<Integer, Book> entry : library.getBookList().entrySet()) {
                     System.out.printf("bookId: %d, bookName: '%s', bookAuthor: '%s', bookYear: %d, status: '%s'\n",
                             entry.getKey(), entry.getValue().getTitle(), entry.getValue().getAuthor(), entry.getValue().getYear(), entry.getValue().getStatus());
                 }
             }
-
-            if(choice == 4){
-                for (Map.Entry<Integer, User> entry : library.getUserList().entrySet()){
+            //Show users
+            if (choice == 4) {
+                for (Map.Entry<Integer, User> entry : library.getUserList().entrySet()) {
                     System.out.printf("userId: %d, userName: '%s'\n",
                             entry.getKey(), entry.getValue().getUserName()
-                            );
+                    );
                 }
             }
 
             //borrow book
-            if(choice == 5){
+            if (choice == 5) {
                 int borrowBookId, borrowUserId;
+                for (Book book : library.getAvailableBooks()){
+                    System.out.println(book.getBookId() + ". " + book.getTitle());
+                }
 
-                while (true){
+                while (true) {
                     System.out.print("Enter userId: ");
                     borrowUserId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(!library.validateUser(borrowUserId)){
+                    if (!library.validateUser(borrowUserId)) {
                         System.out.println("User doesn't exist");
-                    }else {
+                    } else {
                         break;
                     }
                 }
 
-                while (true){
+                while (true) {
                     System.out.print("Enter bookId: ");
                     borrowBookId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(!library.validateBook(borrowBookId)){
+                    if (!library.validateBook(borrowBookId)) {
                         System.out.println("Book doesn't exist.");
-                    }else {
+                    } else {
                         break;
                     }
                 }
@@ -91,70 +100,72 @@ public class Main {
                 library.borrowBook(borrowBookId, borrowUserId);
             }
 
-            if(choice == 6){
+            if (choice == 6) {
                 int userId;
 
-                while(true){
+                while (true) {
                     System.out.print("Enter user Id: ");
                     userId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(!library.validateUser(userId)){
+                    if (!library.validateUser(userId)) {
                         System.out.println("User doesn't exist");
-                    }else{
+                    } else {
                         break;
                     }
                 }
 
                 User user = library.getUserList().get(userId);
 
-                if(user == null){
+                if (user == null) {
                     System.out.println("User doesn't exist.");
                     continue;
                 }
 
                 System.out.println(user.toString());
-                for(Book book :user.getBorrowedBooks()){
-                    System.out.println(book.getBookId() +". " + book.getTitle());
+                for (Book book : user.getBorrowedBooks()) {
+                    System.out.println(book.getBookId() + ". " + book.getTitle());
                 }
             }
-            if (choice == 7){
+            if (choice == 7) {
                 int returnBookId;
                 int returnUserId;
 
-                while (true){
+                while (true) {
                     System.out.print("Enter userId: ");
                     returnUserId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(!library.validateUser(returnUserId)){
+                    if (!library.validateUser(returnUserId)) {
                         System.out.println("User doesn't exist");
-                    }else {
+                    } else {
                         break;
                     }
                 }
 
-                while (true){
+                while (true) {
                     System.out.print("Enter bookId: ");
                     returnBookId = scanner.nextInt();
                     scanner.nextLine();
 
-                    if(!library.validateBook(returnBookId)){
+                    if (!library.validateBook(returnBookId)) {
                         System.out.println("Book doesn't exist.");
-                    }else {
+                    } else {
                         break;
                     }
                 }
 
                 library.returnBook(returnBookId, returnUserId);
             }
-            if (choice == 9){
-                for(Transaction transaction : library.getTransactionList()){
+            if (choice == 8) {
+                for (Transaction transaction : library.getTransactionList()) {
                     System.out.println(transaction.toString());
                 }
+            }else {
+                System.out.println("Invalid input");
             }
         }
 
-        System.out.println("Library exit");
-    }
+            System.out.println("Library exit");
+        }
 }

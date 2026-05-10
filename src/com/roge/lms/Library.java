@@ -58,7 +58,7 @@ public class Library {
             return;
         }
         if(book.getStatus() == Status.BORROWED){
-            System.out.println("Book is borrowed.");
+            System.out.printf("\nBook: %s\nStatus: %s\nUser: %s\n", book.getTitle(), book.getStatus(), user.getUserName());
             return;
         }
         book.setStatus(Status.BORROWED);
@@ -83,6 +83,18 @@ public class Library {
         book.setStatus(Status.AVAILABLE);
         user.removeBorrowedBooks(book);
         System.out.println("Book has returned.");
+    }
+
+    public List<Book> getAvailableBooks(){
+        List<Book> availableBooks = new ArrayList<>();
+
+        for (Book book : bookList.values()){
+            if(book.getStatus() == Status.AVAILABLE){
+                availableBooks.add(book);
+            }
+        }
+
+        return availableBooks;
     }
 
     public boolean validateUser(int userId){
